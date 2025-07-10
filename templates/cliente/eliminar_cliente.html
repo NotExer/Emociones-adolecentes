@@ -1,0 +1,17 @@
+<div class="modal" id="modal">
+  <div class="modal-content-delete">
+    <div class="modal_header text-white">Advertencia</div>
+    <hr class="divider">
+
+    <h5 class="text-white">¿Eliminar esta emoción: <strong id="modal-emocion"></strong>?</h5>
+    <p class="text-light" id="modal-comentario"></p>
+
+    <form method="post" id="form-eliminar" class="form-reset">
+      {% csrf_token %}
+      <div class="text-end">
+        <button type="submit" class="eliminar_button">Eliminar</button>
+        <button type="button" class="crear_button" onclick="cerrar_modal()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>

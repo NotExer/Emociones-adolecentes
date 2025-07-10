@@ -1,0 +1,43 @@
+{% extends 'main/index.html' %}
+
+{% block styles %}
+{{ block.super }}
+{% endblock %}
+
+{% block content %}
+<section class="custom-section">
+  <h2 class="text-center text-light mb-4">Registrar nueva emoción</h2>
+
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <form method="POST">
+        {% csrf_token %}
+
+        {% if messages %}
+        <ul class="message-list">
+          {% for message in messages %}
+          <li class="alert {{ message.tags }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+
+        <div class="form-group">
+          <label for="id_Emociones" class="text-light">¿Qué emoción sientes?</label>
+          {{ form.Emociones }}
+        </div>
+
+        <div class="form-group">
+          <label for="id_Comentario" class="text-light">Comentario (opcional)</label>
+          {{ form.Comentario }}
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Guardar</button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+{% endblock %}

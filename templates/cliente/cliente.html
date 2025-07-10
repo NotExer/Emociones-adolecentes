@@ -1,0 +1,100 @@
+{% extends 'main/index.html' %}
+
+{% block styles %}
+{{ block.super }}
+{% endblock %}
+
+{% block content %}
+<section class="custom-section">
+  <h3 class="custom-plans-title text-center text-light">Mis emociones</h3> 
+
+  <div class="text-center mb-3">
+    <a href="{% url 'crear_cliente' %}" class="btn btn-primary">Registrar nueva emoción</a>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered text-light w-100">
+      <thead class="table-dark text-center">
+        <tr>
+          <th>ID</th>
+          <th>Emoción</th>
+          <th>Comentario</th>
+          <th>Última modificación</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for cliente in cliente %}
+        <tr>
+          <td>{{ cliente.EmocionID }}</td>
+          <td>{{ cliente.Emociones }}</td>
+          <td>{{ cliente.Comentario|default:"—" }}</td>
+          <td>{{ cliente.UltimaModificacion|date:"Y-m-d H:i" }}</td>
+          <td class="text-center">
+            <a href="{% url 'editar_cliente' cliente.EmocionID %}">
+              <button class="editar_button">Editar</button>
+            </a>
+            <button class="eliminar_button" onclick="window.abrir_modal('{{ cliente.EmocionID }}', '{{ cliente.Emociones }}', '{{ cliente.Comentario|default_if_none:'' }}')">
+              Eliminar
+            </button>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="5" class="text-center">No hay emociones registradas.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- MODAL -->
+<div id="modal" class="modal" style="display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); justify-content: center; align-items: center;">
+  <div class="modal-content-delete" style="background-color: #222; padding: 20px; border-radius: 10px; width: 90%; max-width: 500px;">
+    <div class="modal_header text-white">Advertencia</div>
+    <hr class="divider">
+    <h5 class="text-white">¿Eliminar esta emoción: <strong id="modal-emocion"></strong>?</h5>
+    <p id="modal-comentario" class="text-light"></p>
+
+    <form method="post" id="form-eliminar" class="form-reset">
+      {% csrf_token %}
+      <div class="text-end mt-3">
+        <button type="submit" class="eliminar_button">Eliminar</button>
+        <button type="button" class="crear_button" onclick="window.cerrar_modal()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+
+<script>
+  window.abrir_modal = function(id, emocion, comentario) {
+    const modal = document.getElementById("modal");
+    const emocionLabel = document.getElementById("modal-emocion");
+    const comentarioPara = document.getElementById("modal-comentario");
+    const form = document.getElementById("form-eliminar");
+
+    emocionLabel.textContent = emocion;
+    comentarioPara.textContent = comentario ? `Comentario: ${comentario}` : '';
+    form.action = `/clientes/eliminar/${id}/`;
+
+    modal.style.display = "flex";
+  };
+
+  window.cerrar_modal = function() {
+    const modal = document.getElementById("modal");
+    modal.style.display = "none";
+  };
+
+  window.onclick = function(event) {
+    const modal = document.getElementById("modal");
+    if (event.target === modal) {
+      window.cerrar_modal();
+    }
+  };
+</script>
+{% endblock %}
