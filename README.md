@@ -31,5 +31,4 @@ Este proyecto busca apoyar la salud emocional, especialmente en jóvenes, a trav
 
 ---
 
-## 🧩 Estructura del proyecto
 
